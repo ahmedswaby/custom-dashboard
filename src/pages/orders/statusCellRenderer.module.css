@@ -1,0 +1,54 @@
+.tag {
+  border-radius: 100px;
+  padding-left: 4px;
+  padding-right: 12px;
+  line-height: 2;
+  font-weight: 500;
+  border: 1.5px solid rgba(91, 91, 91, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.DeliveredTag {
+  background-color: #84ca8130;
+  border: 1.5px solid rgb(70, 227, 114, 0.2);
+}
+.ShippedTag {
+  background-color: #cf600663;
+  border: 1.5px solid rgba(227, 154, 70, 0.639);
+}
+
+.CancelledTag {
+  background-color: rgb(255, 0, 0, 0.05);
+  color: rgb(234, 83, 83);
+  border: 1.5px solid rgb(255, 0, 0, 0.3);
+}
+
+.PendingTag {
+  background-color: #caab7036;
+}
+
+.circle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  margin-left: 6px;
+}
+
+.DeliveredCircle {
+  background-color: #6d9b7e;
+}
+.ShippedCircle {
+  background-color: #cf6006;
+}
+
+.CancelledCircle {
+  background-color: #ea5353;
+}
+
+.PendingCircle {
+  background-color: #a06d37;
+}

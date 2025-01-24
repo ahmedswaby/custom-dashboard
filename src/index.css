@@ -1,0 +1,78 @@
+html {
+    background-color: #1f2936;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+body {
+  height: 100%;
+}
+#root {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+h1 {
+    color: #FFF;
+} 
+
+
+
+.h-100 {
+  height: 100%;
+}
+
+.cairo-play {
+  font-family: "Cairo Play", serif;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
+}
+
+.page-wrapper {
+  width: 90%;
+  margin: auto;
+}
+
+.table-wrapper {
+  height: calc(100% - 100px);
+}
+.modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #15191ecf;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-dialog {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-height: 80%;
+  overflow-y: auto;
+}
+
+.status-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.btn-close {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: rgb(220, 53, 69);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+  margin-left: auto;
+  display: flex;
+}
