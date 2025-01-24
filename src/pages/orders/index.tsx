@@ -7,7 +7,10 @@ import {
   ColDef,
 } from "ag-grid-community";
 import { useGetOrdersQuery } from '../../store/apis/index';
-import {  orderData } from '../../models/enums'
+import {  orderData } from '../../models/enums';
+import { useLazyGetOrderDetailsQuery , useEditOrderMutation , useDeleteOrderMutation} from "../../store/apis";
+import type { CustomCellRendererProps } from "ag-grid-react";
+
 const statuses = {
   Pending: "Pending",
   Shipped: "Shipped",
@@ -26,6 +29,13 @@ const statusFormatter: ValueFormatterFunc = ({ value }) => value.Name as keyof t
 const Orders = () => {
 
   const [rowData, setRowData] = useState<orderData[]>([]);
+
+
+  const [getOrderDetails] = useLazyGetOrderDetailsQuery();
+  const [editOrder] = useEditOrderMutation();
+  const [deleteOrder] = useDeleteOrderMutation();
+
+
   const [colDefs] = useState<ColDef[]>([
     { field: "orderID" },
     { field: "customerName", filter: true },
@@ -44,12 +54,11 @@ const Orders = () => {
     { field: "totalAmount", filter: true },
     {
       field: "actions",
-      cellRenderer: ActionsCellRenderer,
-      cellEditorParams: {
-        api: {
-          setRowData, // Pass setRowData to the editor component
-        },
-      },
+      // cellRenderer: ActionsCellRenderer,
+      cellRenderer: (props: CustomCellRendererProps) => {
+        // put the value in bold
+        return <ActionsCellRenderer {...props} getOrderDetails={getOrderDetails} editOrder={editOrder} deleteOrder={deleteOrder}/>;
+    }
     }
   ]);
 
@@ -74,7 +83,8 @@ const Orders = () => {
         onGridReady={onGridReady}
         pagination
         paginationPageSize={20}
-        paginationPageSizeSelector={[10, 15, 20]} />
+        paginationPageSizeSelector={[10, 15, 20]}
+        />
     </div>
 
   )

@@ -36,7 +36,7 @@ export const ordersAPI = createApi({
         url: `/${apiRoot}/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ['orders']
+      // invalidatesTags: ['orders']
     }),
     
   }),
