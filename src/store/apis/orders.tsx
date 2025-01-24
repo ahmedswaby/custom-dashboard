@@ -16,6 +16,13 @@ export const ordersAPI = createApi({
       }),
       providesTags: ["orders"],
     }),
+    getLists: builder.query<orderData[], void>({
+      query: () => ({
+        url: `/${apiRoot}`,
+        method: "GET",
+      }),
+      providesTags: ["orders"],
+    }),
     getOrderDetails: builder.query<orderData, void>({
       query: (id) => ({
         url: `/${apiRoot}/${id}`,

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import Table from '../../components/Table';
-import { StatusCellRenderer } from "./statusCellRenderer";
-import { ActionsCellRenderer } from "./actionsCellRenderer";
+import { StatusCellRenderer } from "../../components/Table/statusCellRenderer";
+import { ActionsCellRenderer } from "../../components/Table/actionsCellRenderer";
 import {
   ValueFormatterFunc,
   ColDef,
 } from "ag-grid-community";
-import { useGetOrdersQuery } from '../../store/apis/index';
+import { useGetOrdersQuery } from '../../store/apis/orders';
 import {  orderData } from '../../models/enums';
-import { useLazyGetOrderDetailsQuery , useEditOrderMutation , useDeleteOrderMutation} from "../../store/apis";
+import { useLazyGetOrderDetailsQuery , useEditOrderMutation , useDeleteOrderMutation} from "../../store/apis/orders";
 import type { CustomCellRendererProps } from "ag-grid-react";
 
 const statuses = {

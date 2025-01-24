@@ -3,7 +3,7 @@ import type { ICellRendererParams } from "ag-grid-community";
 import { type FunctionComponent, useCallback } from "react";
 import styles from "./actionsCellRenderer.module.css";
 import { orderData, statuses } from '../../models/enums'
-import Modal from "../../components/modal";
+import Modal from "../modal";
 import { StatusCellRenderer } from "./statusCellRenderer";
 
 interface ActionsCellRendererProps extends ICellRendererParams {
