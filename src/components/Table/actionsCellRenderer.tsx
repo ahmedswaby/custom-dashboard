@@ -27,7 +27,8 @@ export const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = 
     try {
       await getOrderDetails(props.data.id).unwrap().then(res => {
         setOrderDetails(res)
-
+      }).catch(err => {
+        console.error("Failed to fetch order details", err);
       })
       setIsModalOpen(true);
     } catch (error) {
@@ -46,23 +47,21 @@ export const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = 
     if (!confirmDelete) return;
 
     try {
-      await deleteOrder(props.data.id);
-      // Remove the deleted row from the grid
-      props.api.applyTransaction({
-        remove: [props.data],
+      await deleteOrder(props.data).unwrap().then((res) => {
+        if(res) {
+          props.api.applyTransaction({
+            remove: [props.data],
+          });
+            alert("Order deleted successfully.");
+        }
+      }).catch(err=> {
+        console.error("Failed to delete order", err);
+        alert("Failed to delete order. Please try again.");
       });
-
-      alert("Order deleted successfully.");
     } catch (error) {
       console.error("Failed to delete order", error);
       alert("Failed to delete order. Please try again.");
     }
-
-    // i'm updaing grid by calling order list to kwwp dashboard updated, 
-    // but i can also activate this lines if i didn't want to call list again 
-
-    const rowData = props.node.data;
-      props.api.applyTransaction({ remove: [rowData] });
 
   }, [deleteOrder, props.data, props.api]);
 
@@ -72,7 +71,7 @@ export const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = 
   return (
     <div className={styles.buttonCell}>
       {enableEditStatus && (
-        <CustomDropdownEditor {...props} editOrder={editOrder} /> 
+        <CustomDropdownEditor {...props} editOrder={editOrder} />
       )}
 
       {enableViewBtn && (
@@ -83,6 +82,7 @@ export const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = 
           <img src={`/src/assets/icons/eye.svg`} alt="view details" />
         </button>
       )}
+      
       {enableRemoveBtn && (
         <button
           className={`button-secondary ${styles.removeBtn}`}
@@ -90,6 +90,7 @@ export const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = 
           <img src={`/src/assets/icons/delete.svg`} alt="delete" />
         </button>
       )}
+
       {enableViewBtn && (
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           {orderDetails && (
@@ -136,7 +137,6 @@ export const CustomDropdownEditor = (props: CustomDropdownEditor) => {
     setLoading(true); // Show loading while updating
 
     try {
-
       props.editOrder({
         id: props.data.id,
         body: { status: selectedStatus },
@@ -149,33 +149,21 @@ export const CustomDropdownEditor = (props: CustomDropdownEditor) => {
     }
   };
 
-
-  // Required method: Returns the GUI element for Ag-Grid
-  const getGui = () => {
-    return (
-      <select
-        className={styles.editableSelect}
-        value={value}
-        onChange={handleChange}
-      >
-        {loading ? (
-          <option>Loading...</option>
-        ) : (
-          ["Pending", "Shipped", "Delivered", "Cancelled"].map((status) => (
-            <option key={status} value={status}>
-              {status}
-            </option>
-          ))
-        )}
-      </select>
-    );
-  };
-  // Expose required methods to Ag-Grid
-  useEffect(() => {
-    props.api.stopEditing();
-  });
-
-  return getGui();
+  return (<select
+    className={styles.editableSelect}
+    value={value}
+    onChange={handleChange}
+  >
+    {loading ? (
+      <option>Loading...</option>
+    ) : (
+      statuses.map((status) => (
+        <option key={status.id} value={status.Name} selected={props.data.status.id === status.id}>
+          {status.Name}
+        </option>
+      ))
+    )}
+  </select>);
 };
 
 export default CustomDropdownEditor;
