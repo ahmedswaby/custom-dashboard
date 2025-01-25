@@ -48,7 +48,7 @@ export const ActiveButtonCellRender = (props: ActiveCellRendererProps) => {
 
     return (
         <button
-            className={`button-secondary ${styles.toggleStatusBtn}`}
+            className={`${styles.toggleStatusBtn}`}
             onClick={toggleStatus}
         >
             {props.data.status ? "Deactivate" : "Activate"}

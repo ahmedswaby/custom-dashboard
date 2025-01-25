@@ -1,12 +1,30 @@
 import { useEffect, useState } from 'react';
 import Table from '../../components/Table';
 import { ColDef } from "ag-grid-community";
-import { useGetUsersQuery } from '../../store/apis/users';
-import { orderData } from '../../models/enums';
-import ActiveButtonCellRender from '../../components/Table/activeCellRender';
+import { useGetUsersQuery, useLazyGetUserDetailsQuery } from '../../store/apis/users';
+import { orderData, userData } from '../../models/enums';
 import { CustomCellRendererProps } from 'ag-grid-react';
+import ActionsCellRenderer from '../../components/Table/actionsCellRenderer';
+
+
+// Function to render modal content
+const renderModalContent = (details: userData) => (
+  <>
+    <h3>User Details</h3>
+    <p><strong>Name:</strong> {details.name}</p>
+    <p><strong>User name:</strong> {details.username}</p>
+    <p><strong>email:</strong> {details.email}</p>
+    <p><strong>Role:</strong> {details.role}</p>
+    <p><strong>Active:</strong> {details.status ? 'True' : 'False'}</p>
+
+  </>
+);
+
 
 const UserManagement = () => {
+
+  const [getUserDetails] = useLazyGetUserDetailsQuery()
+
 
   const [rowData, setRowData] = useState<orderData[]>([]);
   const [colDefs] = useState<ColDef[]>([
@@ -19,11 +37,20 @@ const UserManagement = () => {
       // cellRenderer: ActionsCellRenderer,
       cellRenderer: (props: CustomCellRendererProps) => {
         // put the value in bold
-        return <ActiveButtonCellRender {...props}/>;
+        // return <ActiveButtonCellRender {...props}/>;
+        return (
+          <ActionsCellRenderer 
+            {...props} 
+            enableViewBtn 
+            enableToggleStatus 
+            renderModalContent={renderModalContent} 
+            getDetails={getUserDetails} 
+          />
+        )
       }
     }
   ]);
-  
+
   const { data } = useGetUsersQuery()
 
   const onGridReady = (params: any) => {
@@ -35,6 +62,7 @@ const UserManagement = () => {
       setRowData(data)
     }
   }, [data])
+
 
   const getRowId = (params: any) => params.data.id; // Use the `id` field as the unique identifier
 

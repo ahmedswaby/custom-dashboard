@@ -5,110 +5,14 @@ import styles from "./actionsCellRenderer.module.css";
 import { orderData, statuses } from '../../models/enums'
 import Modal from "../modal";
 import { StatusCellRenderer } from "./statusCellRenderer";
-
-interface ActionsCellRendererProps extends ICellRendererParams {
-  getOrderDetails?: (id: string) => Promise<any>; // Adjust based on your function's type
-  editOrder: (id: string) => Promise<any>; // Adjust based on your function's type
-  deleteOrder: (id: string) => Promise<any>; // Adjust based on your function's type
-  enableViewBtn: boolean
-  enableRemoveBtn: boolean
-  enableEditStatus: boolean
-}
-
-export const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = (props) => {
-
-  const { getOrderDetails, editOrder, deleteOrder, enableViewBtn, enableRemoveBtn, enableEditStatus } = props;
-
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [orderDetails, setOrderDetails] = useState<orderData | null>(null);
-
-
-  const openDetailsModal = async () => {
-    try {
-      await getOrderDetails(props.data.id).unwrap().then(res => {
-        setOrderDetails(res)
-      }).catch(err => {
-        console.error("Failed to fetch order details", err);
-      })
-      setIsModalOpen(true);
-    } catch (error) {
-      console.error("Failed to fetch order details", error);
-      alert("Failed to load order details. Please try again.");
-    }
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setOrderDetails(null)
-  };
-
-  const onRemoveClick = useCallback(async () => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this order?");
-    if (!confirmDelete) return;
-
-    try {
-      await deleteOrder(props.data).unwrap().then((res) => {
-        if(res) {
-          props.api.applyTransaction({
-            remove: [props.data],
-          });
-            alert("Order deleted successfully.");
-        }
-      }).catch(err=> {
-        console.error("Failed to delete order", err);
-        alert("Failed to delete order. Please try again.");
-      });
-    } catch (error) {
-      console.error("Failed to delete order", error);
-      alert("Failed to delete order. Please try again.");
-    }
-
-  }, [deleteOrder, props.data, props.api]);
+import ActiveButtonCellRender from "./activeCellRender";
 
 
 
 
-  return (
-    <div className={styles.buttonCell}>
-      {enableEditStatus && (
-        <CustomDropdownEditor {...props} editOrder={editOrder} />
-      )}
 
-      {enableViewBtn && (
-        <button
-          className={`button-secondary ${styles.viewBtn}`}
-          onClick={openDetailsModal}
-        >
-          <img src={`/src/assets/icons/eye.svg`} alt="view details" />
-        </button>
-      )}
-      
-      {enableRemoveBtn && (
-        <button
-          className={`button-secondary ${styles.removeBtn}`}
-          onClick={onRemoveClick}>
-          <img src={`/src/assets/icons/delete.svg`} alt="delete" />
-        </button>
-      )}
 
-      {enableViewBtn && (
-        <Modal isOpen={isModalOpen} onClose={closeModal}>
-          {orderDetails && (
-            <>
-              <h3>Order Details</h3>
-              <p><strong>Order ID:</strong> {orderDetails.orderID}</p>
-              <p><strong>Customer Name:</strong> {orderDetails.customerName}</p>
-              <div className="status-wrapper"><strong>Status:</strong> <StatusCellRenderer value={orderDetails?.status ?? {}} valueFormatted={orderDetails?.status?.Name ?? ''} /></div>
 
-              <p><strong>Total Amount:</strong> ${orderDetails.totalAmount}</p>
-            </>
-          )}
-        </Modal>
-      )}
-
-    </div>
-  );
-};
 
 
 
@@ -118,7 +22,7 @@ interface CustomDropdownEditor extends ICellRendererParams {
 
 
 
-export const CustomDropdownEditor = (props: CustomDropdownEditor) => {
+const CustomDropdownEditor = (props: CustomDropdownEditor) => {
 
   const [value, setValue] = useState(props.value);
   const [loading, setLoading] = useState(false);
@@ -166,6 +70,120 @@ export const CustomDropdownEditor = (props: CustomDropdownEditor) => {
   </select>);
 };
 
-export default CustomDropdownEditor;
 
 
+
+
+
+
+
+
+
+
+
+
+
+interface ActionsCellRendererProps extends ICellRendererParams {
+  getDetails?: (id: string) => Promise<any>; // Adjust based on your function's type
+  edit: (id: string) => Promise<any>; // Adjust based on your function's type
+  deleteAction: (id: string) => Promise<any>; // Adjust based on your function's type
+  renderModalContent: (details: any) => React.ReactNode;
+  enableViewBtn?: boolean
+  enableRemoveBtn?: boolean
+  enableEditStatus?: boolean
+  enableToggleStatus?: boolean
+}
+
+const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = (props) => {
+
+  const { getDetails, edit, deleteAction, enableViewBtn, enableRemoveBtn, enableEditStatus , enableToggleStatus, renderModalContent } = props;
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [details, setDetails] = useState<orderData | null>(null);
+
+
+  const openDetailsModal = async () => {
+    try {
+      await getDetails(props.data.id).unwrap().then(res => {
+        setDetails(res)
+      }).catch(err => {
+        console.error("Failed to fetch order details", err);
+      })
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error("Failed to fetch order details", error);
+      alert("Failed to load order details. Please try again.");
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setDetails(null)
+  };
+
+  const onRemoveClick = useCallback(async () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this order?");
+    if (!confirmDelete) return;
+
+    try {
+      await deleteAction(props.data.id).unwrap().then((res: any) => {
+        if (res) {
+          props.api.applyTransaction({
+            remove: [props.data],
+          });
+          alert("Order deleted successfully.");
+        }
+      }).catch((err: any) => {
+        console.error("Failed to delete order", err);
+        alert("Failed to delete order. Please try again.");
+      });
+    } catch (error) {
+      console.error("Failed to delete order", error);
+      alert("Failed to delete order. Please try again.");
+    }
+
+  }, [deleteAction, props.data, props.api]);
+
+
+
+
+  return (
+    <div className={styles.buttonCell}>
+      {enableEditStatus && (
+        <CustomDropdownEditor {...props} editOrder={edit} />
+      )}
+
+      {enableViewBtn && (
+        <button
+          className={`${styles.btnIcon} ${styles.viewBtn}`}
+          onClick={openDetailsModal}
+        >
+          <img src={`/src/assets/icons/eye.svg`} alt="view details" />
+        </button>
+      )}
+
+      {enableToggleStatus && (
+        <ActiveButtonCellRender  {...props} />
+      )}
+
+      {enableRemoveBtn && (
+        <button
+          className={`${styles.btnIcon} ${styles.removeBtn}`}
+          onClick={onRemoveClick}>
+          <img src={`/src/assets/icons/delete.svg`} alt="delete" />
+        </button>
+      )}
+
+      {enableViewBtn && (
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          {/* note: that best practise but still thinking how we can pass data dynamic to the modal */}
+          {details && renderModalContent(details)} {/* Render custom modal content */}
+
+        </Modal>
+      )}
+
+    </div>
+  );
+};
+
+export default ActionsCellRenderer;

@@ -24,3 +24,11 @@ export const statuses: Status[] = [
     totalAmount: string,
   }
   
+  export interface userData {
+    id: string
+    email: number,
+    userName: string,
+    role: string,
+    status: boolean
+  }
+  

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Table from '../../components/Table';
 import { StatusCellRenderer } from "../../components/Table/statusCellRenderer";
-import { ActionsCellRenderer } from "../../components/Table/actionsCellRenderer";
+import ActionsCellRenderer from "../../components/Table/actionsCellRenderer";
 import {
   ValueFormatterFunc,
   ColDef,
@@ -23,6 +23,18 @@ const statuses = {
 
 const statusFormatter: ValueFormatterFunc = ({ value }) => value.Name as keyof typeof statuses ?? "";
 
+
+// Function to render modal content
+const renderModalContent = (details: orderData) => (
+  <>
+    <h3>Order Details</h3>
+    <p><strong>Order ID:</strong> {details.orderID}</p>
+    <p><strong>Customer Name:</strong> {details.customerName}</p>
+    <div className="status-wrapper"><strong>Status:</strong> <StatusCellRenderer value={details?.status ?? {}} valueFormatted={details?.status?.Name ?? ''} /></div>
+
+    <p><strong>Total Amount:</strong> ${details.totalAmount}</p>
+  </>
+);
 
 
 
@@ -54,11 +66,18 @@ const Orders = () => {
     { field: "totalAmount", filter: true },
     {
       field: "actions",
-      // cellRenderer: ActionsCellRenderer,
       cellRenderer: (props: CustomCellRendererProps) => {
-        // put the value in bold
-        return <ActionsCellRenderer {...props} enableEditStatus enableRemoveBtn enableViewBtn
-          getOrderDetails={getOrderDetails} editOrder={editOrder} deleteOrder={deleteOrder} />;
+        return (
+        <ActionsCellRenderer 
+          {...props} 
+          enableEditStatus 
+          enableRemoveBtn 
+          enableViewBtn 
+          renderModalContent={renderModalContent}
+          getDetails={getOrderDetails} 
+          edit={editOrder} 
+          deleteAction={deleteOrder} 
+          />);
       }
     }
   ]);
