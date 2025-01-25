@@ -23,7 +23,13 @@ const Table: React.FC<TableProps> = ({
 
   return (
     <div className="ag-theme-quartz-auto-dark table-wrapper">
-      <AgGridReact rowData={data} columnDefs={columns} pagination={pagination} paginationPageSize={paginationPageSize} paginationPageSizeSelector={paginationPageSizeSelector} rowHeight={60}
+      <AgGridReact 
+        rowData={data} 
+        columnDefs={columns} 
+        pagination={pagination} 
+        paginationPageSize={paginationPageSize} 
+        paginationPageSizeSelector={paginationPageSizeSelector} 
+        rowHeight={60}
         {...rest}
       />
     </div>

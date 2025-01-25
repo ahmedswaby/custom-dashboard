@@ -7,14 +7,17 @@ import Modal from "../modal";
 import { StatusCellRenderer } from "./statusCellRenderer";
 
 interface ActionsCellRendererProps extends ICellRendererParams {
-  getOrderDetails: (id: string) => Promise<any>; // Adjust based on your function's type
+  getOrderDetails?: (id: string) => Promise<any>; // Adjust based on your function's type
   editOrder: (id: string) => Promise<any>; // Adjust based on your function's type
   deleteOrder: (id: string) => Promise<any>; // Adjust based on your function's type
+  enableViewBtn: boolean
+  enableRemoveBtn: boolean
+  enableEditStatus: boolean
 }
 
 export const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = (props) => {
 
-  const { getOrderDetails, editOrder, deleteOrder } = props;
+  const { getOrderDetails, editOrder, deleteOrder, enableViewBtn, enableRemoveBtn, enableEditStatus } = props;
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [orderDetails, setOrderDetails] = useState<orderData | null>(null);
@@ -68,30 +71,39 @@ export const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = 
 
   return (
     <div className={styles.buttonCell}>
-      <CustomDropdownEditor {...props} editOrder={editOrder} />
-      <button
-        className={`button-secondary ${styles.viewBtn}`}
-        onClick={openDetailsModal}
-      >
-        <img src={`/src/assets/icons/eye.svg`} alt="view details" />
-      </button>
-      <button
-        className={`button-secondary ${styles.removeBtn}`}
-        onClick={onRemoveClick}>
-        <img src={`/src/assets/icons/delete.svg`} alt="delete" />
-      </button>
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-        {orderDetails && (
-          <>
-            <h3>Order Details</h3>
-            <p><strong>Order ID:</strong> {orderDetails.orderID}</p>
-            <p><strong>Customer Name:</strong> {orderDetails.customerName}</p>
-            <div className="status-wrapper"><strong>Status:</strong> <StatusCellRenderer value={orderDetails?.status ?? {}} valueFormatted={orderDetails?.status?.Name ?? ''} /></div>
+      {enableEditStatus && (
+        <CustomDropdownEditor {...props} editOrder={editOrder} /> 
+      )}
 
-            <p><strong>Total Amount:</strong> ${orderDetails.totalAmount}</p>
-          </>
-        )}
-      </Modal>
+      {enableViewBtn && (
+        <button
+          className={`button-secondary ${styles.viewBtn}`}
+          onClick={openDetailsModal}
+        >
+          <img src={`/src/assets/icons/eye.svg`} alt="view details" />
+        </button>
+      )}
+      {enableRemoveBtn && (
+        <button
+          className={`button-secondary ${styles.removeBtn}`}
+          onClick={onRemoveClick}>
+          <img src={`/src/assets/icons/delete.svg`} alt="delete" />
+        </button>
+      )}
+      {enableViewBtn && (
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
+          {orderDetails && (
+            <>
+              <h3>Order Details</h3>
+              <p><strong>Order ID:</strong> {orderDetails.orderID}</p>
+              <p><strong>Customer Name:</strong> {orderDetails.customerName}</p>
+              <div className="status-wrapper"><strong>Status:</strong> <StatusCellRenderer value={orderDetails?.status ?? {}} valueFormatted={orderDetails?.status?.Name ?? ''} /></div>
+
+              <p><strong>Total Amount:</strong> ${orderDetails.totalAmount}</p>
+            </>
+          )}
+        </Modal>
+      )}
 
     </div>
   );

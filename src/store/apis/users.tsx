@@ -7,7 +7,7 @@ const apiRoot = 'users'
 export const usersAPI = createApi({
   reducerPath: "users",
   baseQuery: axiosBaseQuery(),
-  tagTypes: ["orders"],
+  tagTypes: ["users"],
   endpoints: builder => ({
     getUsers: builder.query<orderData[], void>({
       query: () => ({
@@ -16,8 +16,16 @@ export const usersAPI = createApi({
       }),
       providesTags: ["users"],
     }),
+    editUser: builder.mutation<orderData, {id: string; body: {status: boolean}}>({
+      query: ({id, body}) => ({
+        url: `/${apiRoot}/${id}`,
+        method: "PATCH",
+        data: body,
+      }),
+      // invalidatesTags: ['users']
+    }),
     
   }),
 });
 
-export const { useGetUsersQuery } = usersAPI;
+export const { useGetUsersQuery, useEditUserMutation } = usersAPI;

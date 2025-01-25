@@ -7,8 +7,8 @@ import {
   ColDef,
 } from "ag-grid-community";
 import { useGetOrdersQuery } from '../../store/apis/orders';
-import {  orderData } from '../../models/enums';
-import { useLazyGetOrderDetailsQuery , useEditOrderMutation , useDeleteOrderMutation} from "../../store/apis/orders";
+import { orderData } from '../../models/enums';
+import { useLazyGetOrderDetailsQuery, useEditOrderMutation, useDeleteOrderMutation } from "../../store/apis/orders";
 import type { CustomCellRendererProps } from "ag-grid-react";
 
 const statuses = {
@@ -49,7 +49,7 @@ const Orders = () => {
         valueFormatter: statusFormatter,
       },
       headerClass: "header-status",
-      
+
     },
     { field: "totalAmount", filter: true },
     {
@@ -57,21 +57,22 @@ const Orders = () => {
       // cellRenderer: ActionsCellRenderer,
       cellRenderer: (props: CustomCellRendererProps) => {
         // put the value in bold
-        return <ActionsCellRenderer {...props} getOrderDetails={getOrderDetails} editOrder={editOrder} deleteOrder={deleteOrder}/>;
-    }
+        return <ActionsCellRenderer {...props} enableEditStatus enableRemoveBtn enableViewBtn
+          getOrderDetails={getOrderDetails} editOrder={editOrder} deleteOrder={deleteOrder} />;
+      }
     }
   ]);
 
- const { data } = useGetOrdersQuery()
+  const { data } = useGetOrdersQuery()
 
- const onGridReady = (params: any) => {
-  params.api.sizeColumnsToFit();
-};
+  const onGridReady = (params: any) => {
+    params.api.sizeColumnsToFit();
+  };
 
 
 
   useEffect(() => {
-    if(data) {
+    if (data) {
       setRowData(data)
     }
   }, [data])
@@ -84,7 +85,7 @@ const Orders = () => {
         pagination
         paginationPageSize={20}
         paginationPageSizeSelector={[10, 15, 20]}
-        />
+      />
     </div>
 
   )
