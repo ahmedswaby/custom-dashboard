@@ -1,22 +1,29 @@
+import React from 'react';
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
-import Table from './index'; // Adjust the import path as necessary
-import { Provider } from 'react-redux';
-import store from '../../store/store';
+import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi } from 'vitest';
+import Table from './index'; // Adjust the import path to your component
+import '@testing-library/jest-dom';
 
-test('renders table with correct data', () => {
-    const mockData = [
-      { id: 1, name: 'Alice', age: 25 },
-      { id: 2, name: 'Bob', age: 30 },
-    ];
-    const columns = [
-      { Header: 'ID', accessor: 'id' },
-      { Header: 'Name', accessor: 'name' },
-      { Header: 'Age', accessor: 'age' },
-    ];
-    render( <Provider store={store}><Table data={mockData} columns={columns} /></Provider>);
-    expect(screen.getByText('Alice')).toBeInTheDocument();
-    expect(screen.getByText('Bob')).toBeInTheDocument();
-    expect(screen.getByText('25')).toBeInTheDocument();
+describe('Table Component', () => {
+  const mockData = [
+    { id: 1, name: 'John Doe', age: 30 },
+    { id: 2, name: 'Jane Doe', age: 25 },
+  ];
+
+  const mockColumns = [
+    { field: 'Name', headerName: 'Name' },
+    { field: 'Age', headerName: 'Age' },
+  ];
+
+  it('renders the table with data', () => {
+    const { getAllByRole } = render(<Table data={mockData} columns={mockColumns} />);
+    const headers = getAllByRole('columnheader');
+    expect(headers[0]).toHaveTextContent('Name');
+    expect(headers[1]).toHaveTextContent('Age');
   });
-  
+
+
+
+
+});

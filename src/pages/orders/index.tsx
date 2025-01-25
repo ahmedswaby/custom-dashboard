@@ -7,7 +7,7 @@ import {
   ColDef,
 } from "ag-grid-community";
 import { useGetOrdersQuery } from '../../store/apis/orders';
-import { orderData } from '../../models/enums';
+import { orderData } from '~/Models/enums';
 import { useLazyGetOrderDetailsQuery, useEditOrderMutation, useDeleteOrderMutation } from "../../store/apis/orders";
 import type { CustomCellRendererProps } from "ag-grid-react";
 
