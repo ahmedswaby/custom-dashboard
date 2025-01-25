@@ -1,6 +1,7 @@
 .buttonCell {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin: 10px;
 }
 
@@ -26,6 +27,10 @@
   display: flex !important;
   justify-content: center;
   align-items: center;
+}
+
+.removeBtn {
+  /* margin-left: auto; */
 }
 
 .removeBtn img {

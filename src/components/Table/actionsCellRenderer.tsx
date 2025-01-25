@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import type { ICellRendererParams } from "ag-grid-community";
 import { type FunctionComponent, useCallback } from "react";
 import styles from "./actionsCellRenderer.module.css";
-import { orderData, statuses } from '../../models/enums'
+import { orderData, statuses, userData } from '../../models/enums'
 import Modal from "../modal";
 import { StatusCellRenderer } from "./statusCellRenderer";
 import ActiveButtonCellRender from "./activeCellRender";
@@ -99,7 +99,7 @@ const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = (props)
   const { getDetails, edit, deleteAction, enableViewBtn, enableRemoveBtn, enableEditStatus , enableToggleStatus, renderModalContent } = props;
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [details, setDetails] = useState<orderData | null>(null);
+  const [details, setDetails] = useState<orderData | userData>(null);
 
 
   const openDetailsModal = async () => {
@@ -107,12 +107,12 @@ const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = (props)
       await getDetails(props.data.id).unwrap().then(res => {
         setDetails(res)
       }).catch(err => {
-        console.error("Failed to fetch order details", err);
+        console.error("Failed to fetch details", err);
       })
       setIsModalOpen(true);
     } catch (error) {
-      console.error("Failed to fetch order details", error);
-      alert("Failed to load order details. Please try again.");
+      console.error("Failed to fetch details", error);
+      alert("Failed to load details. Please try again.");
     }
   };
 
@@ -122,7 +122,7 @@ const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = (props)
   };
 
   const onRemoveClick = useCallback(async () => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this order?");
+    const confirmDelete = window.confirm("Are you sure you want to delete this ?");
     if (!confirmDelete) return;
 
     try {
@@ -134,12 +134,12 @@ const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = (props)
           alert("Order deleted successfully.");
         }
       }).catch((err: any) => {
-        console.error("Failed to delete order", err);
-        alert("Failed to delete order. Please try again.");
+        console.error("Failed to delete this", err);
+        alert("Failed to delete this. Please try again.");
       });
     } catch (error) {
-      console.error("Failed to delete order", error);
-      alert("Failed to delete order. Please try again.");
+      console.error("Failed to delete this", error);
+      alert("Failed to delete this. Please try again.");
     }
 
   }, [deleteAction, props.data, props.api]);

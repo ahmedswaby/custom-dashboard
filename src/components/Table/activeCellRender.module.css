@@ -6,6 +6,7 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    min-width: 100px;
   }
   
   .toggleStatusBtn:hover {

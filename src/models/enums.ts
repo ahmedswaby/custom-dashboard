@@ -25,9 +25,10 @@ export const statuses: Status[] = [
   }
   
   export interface userData {
-    id: string
+    id: string,
+    name: string,
     email: number,
-    userName: string,
+    username: string,
     role: string,
     status: boolean
   }

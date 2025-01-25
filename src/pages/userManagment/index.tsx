@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Table from '../../components/Table';
 import { ColDef } from "ag-grid-community";
-import { useGetUsersQuery, useLazyGetUserDetailsQuery } from '../../store/apis/users';
+import { useGetUsersQuery, useLazyGetUserDetailsQuery , useDeleteUserMutation } from '../../store/apis/users';
 import { orderData, userData } from '../../models/enums';
 import { CustomCellRendererProps } from 'ag-grid-react';
 import ActionsCellRenderer from '../../components/Table/actionsCellRenderer';
@@ -24,16 +24,22 @@ const renderModalContent = (details: userData) => (
 const UserManagement = () => {
 
   const [getUserDetails] = useLazyGetUserDetailsQuery()
+  const [deleteUser] = useDeleteUserMutation();
+
 
 
   const [rowData, setRowData] = useState<orderData[]>([]);
   const [colDefs] = useState<ColDef[]>([
-    { field: "id" },
+    { field: "id" , headerName: "User ID"},
     { field: "username" },
     { field: "email" },
     { field: "role" },
     {
       field: "status",
+      headerName: "Active Status"
+    },
+    {
+      field: "Actions",
       // cellRenderer: ActionsCellRenderer,
       cellRenderer: (props: CustomCellRendererProps) => {
         // put the value in bold
@@ -45,6 +51,8 @@ const UserManagement = () => {
             enableToggleStatus 
             renderModalContent={renderModalContent} 
             getDetails={getUserDetails} 
+            enableRemoveBtn
+            deleteAction={deleteUser}
           />
         )
       }
