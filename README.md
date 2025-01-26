@@ -42,7 +42,7 @@ This repository contains the project that show a table (that is generic) for ord
    - Implemented state management using [Redux-RTK].
 
 5. **Testing**  
-   - Unit Testing using [Vitest].  
+   - Unit Testing using [Vitest] it's compitable with vitest and much faster than Jest.  
 
 ---
 

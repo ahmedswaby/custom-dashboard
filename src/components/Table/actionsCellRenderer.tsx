@@ -10,6 +10,7 @@ interface ActionsCellRendererProps extends ICellRendererParams {
   getDetails?: (id: string) => Promise<any>; // Adjust based on your function's type
   edit: (id: string) => Promise<any>; // Adjust based on your function's type
   deleteAction: (id: string) => Promise<any>; // Adjust based on your function's type
+  toggleStatus: (id: string) => Promise<any>; // Adjust based on your function's type
   renderModalContent: (details: any) => React.ReactNode;
   enableViewBtn?: boolean
   enableRemoveBtn?: boolean
@@ -92,7 +93,9 @@ const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = (props)
       {enableRemoveBtn && (
         <button
           className={`${styles.btnIcon} ${styles.removeBtn}`}
-          onClick={onRemoveClick}>
+          onClick={onRemoveClick}
+          data-testid="delete"
+          >
           <img src={`/src/assets/icons/delete.svg`} alt="delete" />
         </button>
       )}

@@ -1,19 +1,17 @@
+import React from "react";
 import { useCallback , useState } from "react";
 import type { ICellRendererParams } from "ag-grid-community";
 import styles from "./activeCellRender.module.css";
-
-import { useEditUserMutation } from "../../store/apis/users";
-
-
 interface ActiveCellRendererProps extends ICellRendererParams {
-    enableToggleStatus?: boolean
+    enableToggleStatus?: boolean;
+    toggleStatus: (id: string) => Promise<any>; 
 }
 
 export const ActiveButtonCellRender = (props: ActiveCellRendererProps) => {
 
-    const [editUser] = useEditUserMutation();
+
     const [isActive , setIsActive] = useState<boolean>(props.data.status);
-    
+
     // const isActive = props.data.status;
     const action = isActive ? "deactivate" : "activate";
 
@@ -26,7 +24,7 @@ export const ActiveButtonCellRender = (props: ActiveCellRendererProps) => {
 
         try {
             // Call API to toggle status
-            await editUser({ id: props.data.id, body: { status: !isActive } }).unwrap().then(res => {
+            await props.toggleStatus({ id: props.data.id, body: { status: !isActive } }).unwrap().then(res => {
                 if (res) {
                     // Update the row data in the grid
                     props.api.applyTransaction({
@@ -44,13 +42,14 @@ export const ActiveButtonCellRender = (props: ActiveCellRendererProps) => {
             console.error("Failed to update user status:", error);
             alert("Failed to update user status. Please try again.");
         }
-    }, [action, editUser, props.data, props.api, isActive]);
+    }, [action, props.toggleStatus, props.data, props.api, isActive]);
 
 
 
     return (
         <button
             className={`${styles.toggleStatusBtn}`}
+            data-testid="toggle status"
             onClick={toggleStatus}
         >
             {isActive ? "Deactivate" : "Activate"}

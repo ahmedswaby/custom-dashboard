@@ -217,7 +217,7 @@
       "username": "alicej",
       "email": "alice.johnson@example.com",
       "role": "admin",
-      "status": false
+      "status": true
     },
     {
       "id": "2",

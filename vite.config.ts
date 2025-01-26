@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite'
 import inject from "@rollup/plugin-inject";
 import viteReact from "@vitejs/plugin-react";
-import path from "path";
 
 
 export const hash = Math.floor(Math.random() * 90000) + 10000;

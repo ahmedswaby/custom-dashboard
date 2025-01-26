@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Table from '../../components/Table';
 import { ColDef } from "ag-grid-community";
-import { useGetUsersQuery, useLazyGetUserDetailsQuery , useDeleteUserMutation } from '../../store/apis/users';
+import { useGetUsersQuery, useLazyGetUserDetailsQuery , useDeleteUserMutation , useEditUserMutation} from '../../store/apis/users';
 import { orderData, userData } from '../../models/enums';
 import { CustomCellRendererProps } from 'ag-grid-react';
 import ActionsCellRenderer from '../../components/Table/actionsCellRenderer';
@@ -25,6 +25,7 @@ const UserManagement = () => {
 
   const [getUserDetails] = useLazyGetUserDetailsQuery()
   const [deleteUser] = useDeleteUserMutation();
+  const [editUser] = useEditUserMutation();
 
 
 
@@ -53,6 +54,7 @@ const UserManagement = () => {
             getDetails={getUserDetails} 
             enableRemoveBtn
             deleteAction={deleteUser}
+            toggleStatus={editUser}
           />
         )
       }
