@@ -50,9 +50,8 @@ This repository contains the project that show a table (that is generic) for ord
 
 Make sure you have the following installed:
 
-- [Node.js](https://nodejs.org/) (version X.X.X or later)
-- [Package Manager] (npm/yarn/pnpm)
-- [Any other tools or dependencies]
+- [Node.js](https://nodejs.org/)
+- [Package Manager] (npm)
 
 ---
 
