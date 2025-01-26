@@ -41,9 +41,9 @@ This repository contains the project that show a table (that is generic) for ord
    - Styled the UI using [CSS].  
    - Implemented state management using [Redux-RTK].
 
-   # Table Component & Supporting Features
+   ## Table Component & Supporting Features
 
-    ## Overview
+    **Overview**
     The Table Component provides a customizable, interactive data table with features like sorting, filtering, pagination, and custom cell rendering. It uses ag-Grid for powerful performance and flexibility, making it ideal for large datasets.
 
     ---
