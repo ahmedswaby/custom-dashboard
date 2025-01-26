@@ -1,87 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import type { ICellRendererParams } from "ag-grid-community";
 import { type FunctionComponent, useCallback } from "react";
 import styles from "./actionsCellRenderer.module.css";
-import { orderData, statuses, userData } from '../../models/enums'
+import { orderData, userData } from '../../models/enums'
 import Modal from "../modal";
 import ActiveButtonCellRender from "./activeCellRender";
-
-
-
-
-
-
-
-
-
-
-interface CustomDropdownEditor extends ICellRendererParams {
-  editOrder: (id: string) => Promise<any>; // Adjust based on your function's type
-}
-
-
-
-const CustomDropdownEditor = (props: CustomDropdownEditor) => {
-
-  const [value, setValue] = useState(props.value);
-  const [loading, setLoading] = useState(false);
-
-  // Update local state when the value changes
-  useEffect(() => {
-    setValue(props.value);
-  }, [props.value]);
-
-  const handleChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
-
-    const selectedStatus = statuses.find((status) => status.Name === event.target.value);
-    if (!selectedStatus) return;
-
-    setValue(selectedStatus);
-    setLoading(true); // Show loading while updating
-
-    try {
-      props.editOrder({
-        id: props.data.id,
-        body: { status: selectedStatus },
-      })
-    } catch (error) {
-      console.error("Failed to update status", error);
-      alert("Failed to update status. Please try again.");
-    } finally {
-      setLoading(false); // Hide loading
-    }
-  };
-
-  return (<select
-    className={styles.editableSelect}
-    value={value}
-    onChange={handleChange}
-  >
-    {loading ? (
-      <option>Loading...</option>
-    ) : (
-      statuses.map((status) => (
-        <option key={status.id} value={status.Name} selected={props.data.status.id === status.id}>
-          {status.Name}
-        </option>
-      ))
-    )}
-  </select>);
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import CustomDropdownEditor from "./CustomDropdownEditor";
 interface ActionsCellRendererProps extends ICellRendererParams {
   getDetails?: (id: string) => Promise<any>; // Adjust based on your function's type
   edit: (id: string) => Promise<any>; // Adjust based on your function's type
@@ -98,7 +22,7 @@ const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = (props)
   const { getDetails, edit, deleteAction, enableViewBtn, enableRemoveBtn, enableEditStatus , enableToggleStatus, renderModalContent } = props;
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [details, setDetails] = useState<orderData | userData>(null);
+  const [details, setDetails] = useState<orderData | userData | null>(null);
 
 
   const openDetailsModal = async () => {
@@ -125,7 +49,7 @@ const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = (props)
     if (!confirmDelete) return;
 
     try {
-      await deleteAction(props.data.id).unwrap().then((res: any) => {
+      await deleteAction(props.data.id).unwrap().then((res: orderData | userData) => {
         if (res) {
           props.api.applyTransaction({
             remove: [props.data],
@@ -175,9 +99,7 @@ const ActionsCellRenderer: FunctionComponent<ActionsCellRendererProps> = (props)
 
       {enableViewBtn && (
         <Modal isOpen={isModalOpen} onClose={closeModal}>
-          {/* note: that best practise but still thinking how we can pass data dynamic to the modal */}
           {details && renderModalContent(details)} {/* Render custom modal content */}
-
         </Modal>
       )}
 

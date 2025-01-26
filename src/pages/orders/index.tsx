@@ -7,16 +7,16 @@ import {
   ColDef,
 } from "ag-grid-community";
 import { useGetOrdersQuery } from '../../store/apis/orders';
-import { orderData } from '~/Models/enums';
+import { orderData , statuses as statusEnum } from '../../models/enums';
 import { useLazyGetOrderDetailsQuery, useEditOrderMutation, useDeleteOrderMutation } from "../../store/apis/orders";
 import type { CustomCellRendererProps } from "ag-grid-react";
 
-const statuses = {
-  Pending: "Pending",
-  Shipped: "Shipped",
-  Delivered: "Delivered",
-  Cancelled: "Cancelled",
-};
+
+// Generate the statuses object dynamically
+export const statuses = statusEnum.reduce((acc, status) => {
+  acc[status.Name] = status.Name;
+  return acc;
+}, {} as Record<string, string>);
 
 
 
